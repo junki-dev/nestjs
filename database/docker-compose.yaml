@@ -1,0 +1,28 @@
+version: '3.8'
+
+networks:
+  document-network:
+
+services:
+  mongodb:
+    image: mongo:4.2.17-bionic
+    container_name: mongodb
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: '200k'
+        max-file: '5'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: document
+      MONGO_INITDB_ROOT_PASSWORD: document
+      MONGO_INITDB_DATABASE: document
+      TZ: 'Asia/Seoul'
+    volumes:
+      - ./volumes/mongodb/data:/data/db
+      - ./volumes/mongodb/log:/var/log/mongodb/
+    ports:
+      - 27017:27017
+    command: mongod
+    networks:
+      - document-network
