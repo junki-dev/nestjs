@@ -10,9 +10,9 @@ import { User, UserDocument } from './schemas/user.schema';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async findOne(userId: string): Promise<User | undefined> {
+  async findOne(userId: string): Promise<User> {
     console.log(`findOne() ${userId}`);
-    return this.userModel.findOne({ id: userId }).exec();
+    return this.userModel.findOne({ id: userId });
   }
 
   async create(createUser: CreateUserDto): Promise<User> {
