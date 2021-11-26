@@ -1,19 +1,25 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
+import { DocModule } from './doc/doc.module';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      `mongodb://document:document@localhost:27017/document?authSource=admin&authMechanism=SCRAM-SHA-1`,
-    ),
     UsersModule,
     AuthModule,
+    DocModule,
+    TypeOrmModule.forRoot({
+      type: 'mongodb',
+      url: 'mongodb://document:document@localhost:27017/document?authSource=admin&authMechanism=SCRAM-SHA-1',
+      logging: true,
+      autoLoadEntities: true,
+      entities: [join(__dirname, '**/**.entity{.ts,.js}')],
+      synchronize: true,
+    }),
   ],
-  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
